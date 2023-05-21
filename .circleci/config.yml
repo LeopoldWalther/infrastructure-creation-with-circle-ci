@@ -20,6 +20,14 @@ jobs:
             --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
             --region us-east-1
 
+            aws cloudformation create-stack \
+            --stack-name infra \
+            --template-body infrastructure.yml \
+            --parameters infrastructure-parameters.json \
+            --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
+            --region=us-east-1
+
+
 workflows:
   welcome:
     jobs:
