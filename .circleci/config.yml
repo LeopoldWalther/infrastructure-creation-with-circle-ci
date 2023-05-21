@@ -20,8 +20,7 @@ jobs:
             --template-body file://infrastructure.yml \
             --parameters file://infrastructure-parameters.json \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
-            --region=us-east-1
-
+            --region us-east-1
 
 workflows:
   welcome:
