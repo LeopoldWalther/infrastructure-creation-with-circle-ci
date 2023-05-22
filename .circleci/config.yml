@@ -39,7 +39,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: [""]
+          fingerprints: ["0e:4a:b0:29:59:ff:23:40:93:e8:14:7d:83:ff:4d:19"]
       - run:
           name: Install dependencies
           command: |
@@ -47,9 +47,9 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ansible-playbook -i
+            ansible-playbook -i inventory main-remote.yml
 
 workflows:
   welcome:
     jobs:
-      - create_infrastructure
+      - configure_infrastructure
