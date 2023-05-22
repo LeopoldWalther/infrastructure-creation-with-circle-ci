@@ -18,8 +18,8 @@ jobs:
           command: |
             aws cloudformation create-stack \
             --stack-name infra \
-            --template-body infrastructure.yml \
-            --parameters infrastructure-parameters.json \
+            --template-body file://infrastructure.yml \
+            --parameters file://infrastructure-parameters.json \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
             --region=us-east-1
 
