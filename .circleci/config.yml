@@ -14,7 +14,7 @@ jobs:
     steps: 
       - checkout
       - run: 
-          name: "prints the owner project environment variable to the console"
+          name: Deploy stack on aws cloudformation
           command: |
             aws cloudformation create-stack \
             --stack-name infra \
@@ -22,7 +22,32 @@ jobs:
             --parameters file://infrastructure-parameters.json \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
             --region=us-east-1
-
+      - run:
+          name: Get public IP of Ubuntu machin in aws
+          command: |
+            aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text >> inventory
+      - run:
+          name: Print IP
+          command: |
+            cat inventory
+          
+  configure_infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: [""]
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible 
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i
 
 workflows:
   welcome:
