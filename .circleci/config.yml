@@ -16,11 +16,13 @@ jobs:
       - run: 
           name: "prints the owner project environment variable to the console"
           command: |
-            aws cloudformation deploy \
-            --template-file infrastructure.yml \
-            --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
-            --parameter-overrides MyBucketName="mybucket-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --region us-east-1
+            aws cloudformation create-stack \
+            --stack-name infra \
+            --template-body infrastructure.yml \
+            --parameters infrastructure-parameters.json \
+            --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
+            --region=us-east-1
+
 
 workflows:
   welcome:
