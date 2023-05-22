@@ -9,6 +9,7 @@ Parameters:
     EnvironmentName:
         Description: Environment name that will be prefixed to resource names
         Type: String
+        Default: AnisbleTest
 
     VpcCIDR: 
         Description: IP range (CIDR notation) for this VPC
