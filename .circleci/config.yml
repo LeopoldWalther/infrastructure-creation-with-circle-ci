@@ -12,7 +12,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps: 
-     - checkout
+      - checkout
       - run: 
           name: "prints the owner project environment variable to the console"
           command: |
