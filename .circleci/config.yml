@@ -41,7 +41,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["0e:4a:b0:29:59:ff:23:40:93:e8:14:7d:83:ff:4d:19"]
       - run:
-          name: Install dependencies
+          name: Install ansible
           command: |
             apk add --update ansible 
       - run:
@@ -49,7 +49,26 @@ jobs:
           command: |
             ansible-playbook -i inventory main-remote.yml
 
+  smoke_test:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: 
+          name: Install curl
+          command: |
+            apk add --update curl
+      - run:
+          name: Run smoke test
+          command: |
+            URL="https://blog.udacity.com/"
+            if curl -s --head ${URL} 
+            then
+              return 0
+            else
+              return 1
+            fi
+
 workflows:
   welcome:
     jobs:
-      - configure_infrastructure
+      - smoke_test
