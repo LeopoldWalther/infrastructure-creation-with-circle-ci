@@ -1,9 +1,17 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+# latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
 orbs:
-  # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
+
+commands:
+  destroy_environment: # Rollback
+    steps:
+      - run:
+          name: Destroy environment
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
 
 # Orchestrate or schedule a set of jobs
 jobs:
@@ -17,7 +25,7 @@ jobs:
           name: Deploy stack on aws cloudformation
           command: |
             aws cloudformation create-stack \
-            --stack-name infra \
+            --stack-name -${CIRCLE_WORKFLOW_ID:0:7} \
             --template-body file://infrastructure.yml \
             --parameters file://infrastructure-parameters.json \
             --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
@@ -67,8 +75,14 @@ jobs:
             else
               return 1
             fi
+      - run:
+          name: Simulate error
+          command: |
+            return 1
+      - destroy_environment
+        when: on_fail 
 
 workflows:
   welcome:
     jobs:
-      - smoke_test
+      - create_infrastructure
